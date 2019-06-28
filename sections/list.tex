@@ -1,0 +1,195 @@
+\documentclass[../algorytmy.tex]{subfiles}
+
+\begin{document}
+
+    \subsection{Jednokierunkowa}
+
+    % \subsubsection{Budowa}
+
+    % \begin{minted}[mathescape,
+    %            linenos,
+    %            numbersep=5pt,
+    %            gobble=2,
+    %            frame=lines,
+    %            fontsize=\footnotesize,
+    %            framesep=2mm]{java}
+    % class List<T> {
+    %     class Node {
+    %         T data;
+    %         Node next = null;
+    %     }
+
+    %     Node first = null; //bez głowy
+    % }
+    % \end{minted}
+    %     % // Node head = new Node();
+
+    % \subsubsection{Wyszukiwanie}
+
+    % % \textbf{Z GŁOWĄ}
+    % \begin{minted}[mathescape,
+    %            linenos,
+    %            numbersep=5pt,
+    %            gobble=2,
+    %            frame=lines,
+    %            % fontsize=\footnotesize,
+    %            framesep=2mm]{java}
+    % Node find(T key) {
+    %     Node current = first;
+
+    %     while (current != null && !current.data.equals(key))
+    %         current = current.next;
+
+    %     return current;
+    % }
+    % \end{minted}
+
+    % \textbf{BEZ GŁOWY}
+
+    \subsubsection{Wstawianie za podanym elementem}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\small,
+               framesep=2mm]{java}
+    void insertAfter(T elem, Node p) {
+        Node newElem = new Node(elem);
+
+        if (p == null) { //wstawianie na poczatek
+            newElem.next = first;
+            first = newElem;
+        }
+        else {
+            newElem.next = p.next;
+            p.next = newElem;
+        }
+    }
+    \end{minted}
+
+    \pagebreak
+    \subsubsection{Usuwanie elementu o podanej wartości}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void delete(T key) {
+        Node curr = first;
+        Node prev = null;
+
+        while (curr != null && p.data != key) {
+            prev = curr;
+            curr = curr.next;
+        }
+
+        if (curr != null) {
+            if (prev == null) {
+                first = p.next;
+            }
+            else {
+                prev.next = p.next;
+            }
+        }
+    }
+    \end{minted}
+
+    \subsection{Dwukierunkowa}
+    \subsubsection{Usuwanie elementu o podanej wartości}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void delete(T key) {
+        Node elem = find(key);
+
+        if (curr != null) {
+            elem.prev.next = elem.next;
+            elem.next.prev = elem.prev;
+        }
+    }
+    \end{minted}
+
+    \subsubsection{Wstawanie elementu za elementem o podanej wartości}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void insertAfter(T x, T key) {
+        Node elem = find(key);
+        Node newNode = new Node(x);
+
+        if (elem == last) {
+            newNode.next = null;
+            last = newNode;
+        }
+        else {
+            newNode.next = elem.next;
+            elem.next.prev = newNode
+        }
+
+        newNode.prev = elem;
+        elem.next = newNode;
+    }
+    \end{minted}
+
+    \subsubsection{Wstawanie elementu na początek}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void insertFirst(T value) {
+        Node newNode = new Node(value);
+
+        if (isEmpty()) {
+            last = newNode;
+        }
+        else {
+            first.prev = newElem;
+        }
+
+        newNode.next = first;
+        first = newElem;
+    }
+    \end{minted}
+
+
+    \subsection{Prosta cykliczna}
+    \subsubsection{Budowa}
+    W ostatniej komórce referencja \texttt{next} jest  adresem  pierwszej
+    komórki listy (lub nagłówka, jeśli wersja z nagłówkiem).
+    Zamiast testu \texttt{p != null} należy zastosować test \texttt{p != s},
+    gdzie \texttt{s} jest referencją komórki, od której zaczęliśmy przegląd
+    listy.
+
+    \subsubsection{Usuwanie elementu o podanej wartości}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void insertFirst(T value) {
+        Node curr = first;
+
+        while (curr.next != first && curr.next.data != value) {
+            curr = curr.next;
+        }
+
+        if (curr.next != first) {
+            curr.next = curr.next.next;
+        }
+    }
+    \end{minted}
+
+% \pagebreak
+
+\end{document}

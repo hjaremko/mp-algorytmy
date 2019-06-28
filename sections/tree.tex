@@ -1,0 +1,531 @@
+\documentclass[algorytmy.tex]{subfiles}
+
+\begin{document}
+    \subsection{Preorder}
+        \textbf{REKURENCYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    void preorder(Node root) {
+        if (root != null) {
+            print(root.info);
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+\end{minted}
+
+        \textbf{ITERACYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    void preorder() {
+        Stack<Node> stack = new Stack<>();
+        Node current = root;
+
+        while (current != null || !stack.isEmpty()) {
+            if (current != null) {
+                print(current.info);
+                stack.push(current.right);
+                current = current.left;
+            }
+            else {
+                current = stack.pop();
+            }
+        }
+    }
+\end{minted}
+
+\pagebreak
+
+\subsection{Inorder}
+        \textbf{REKURENCYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            print(root.info);
+            inorder(root.right);
+        }
+    }
+\end{minted}
+
+        \textbf{ITERACYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    void inorder() {
+        Stack<Node> stack = new Stack<>();
+        Node current = root;
+
+        while (current != null || !stack.isEmpty()) {
+            if (current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+            else {
+                current = stack.pop();
+                print(current.info);
+                current = current.right;
+            }
+        }
+    }
+\end{minted}
+
+\pagebreak
+
+\subsection{Postorder}
+        \textbf{REKURENCYJNIE}\\
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    void postorder(Node root) {
+        if (root != null) {
+            postorder(root.left);
+            postorder(root.right);
+            print(root.info);
+        }
+    }
+\end{minted}
+
+        \textbf{ITERACYJNIE}\\
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void postorder() {
+        Stack<Node> stack = new Stack<>();
+        Node current = root;
+
+        while (current != null || !stack.isEmpty()) {
+            while (current != null) {
+                if (current.right != null) {
+                    stack.push(current.right);
+                }
+
+                stack.push(current);
+                current = current.left;
+            }
+
+            current = stack.pop();
+
+            if (current.right != null && stack.top() == current.right) {
+                stack.pop();
+                stack.push(current);
+                current = current.right;
+            }
+            else {
+                print(current.info);
+                current = null;
+            }
+        }
+    }
+\end{minted}
+
+\pagebreak
+
+\subsection{Levelorder}
+
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    void levelorder() {
+        if (root == null) {
+            return;
+        }
+
+        Queue<Node> queue = new Queue<>();
+        queue.pushBack(root);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.popFront();
+            print(current.info);
+
+            if (current.left != null) {
+                queue.pushBack(current.left);
+            }
+
+            if (current.right != null) {
+                queue.pushBack(current.right);
+            }
+        }
+}
+\end{minted}
+
+
+\subsection{Drzewa poszukiwań binarnych (BST)}
+
+Jest to drzewo binarne, w którym lewe poddrzewo każdego węzła zawiera
+\textbf{wyłącznie elementy o kluczach nie większych niż klucz węzła a prawe
+poddrzewo zawiera wyłącznie elementy o kluczach nie mniejszych niż klucz węzła}.\\
+
+Dla pełnego drzewa BST o $n$ węzłach pesymistyczny koszt każdej z podstawowych
+operacji wynosi $O(\log_2 n)$.\\
+
+Drzewo binarne jest BST wtedy i tylko wtedy gdy lista jego węzłów w porządku
+\texttt{inorder} jest ciągiem \textbf{niemalejącym}.\\
+
+\subsubsection{Wyszukanie wartości minimalnej}
+
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    Node minimum() { // Maksymalna analogicznie tylko w prawo
+        Node current = root;
+        Node last;
+
+        while (current != null) {
+            last = current;
+            current = current.left;
+        }
+
+        return last;
+    }
+\end{minted}
+
+\subsubsection{Wyszukanie danego klucza}
+
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   framesep=2mm]{java}
+    Node search(int key) {
+        Node current = root;
+
+        while (current != null && key != current.info) {
+            if (key < current.info) {
+                current = current.left;
+            }
+            else {
+                current = current.right;
+            }
+        }
+
+        return current;
+    }
+\end{minted}
+
+\pagebreak
+
+\subsubsection{Wstawianie danego klucza}
+\textbf{ITERACYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void insert(int key) {
+        Node s, p, prev;
+        s = new Node(key); //s.left = null; s.right = null;
+
+        if (root == null) //drzewo puste
+            root = s;
+        else {
+            p = root;
+            prev = null;
+
+            while (p != null) {
+                prev = p;
+
+                if (key < p.info)
+                    p = p.left;
+                else
+                    p = p.right;
+            }
+
+            if (key < prev.info)
+                prev.left = s;
+            else
+                prev.right = s;
+        }
+    }
+\end{minted}
+
+% \pagebreak
+
+\textbf{REKURENCYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void insert(Node p, int key) { //wywołanie: insert(root, x);
+        if (p == null) { //baza rekurencji, tworzenie węzła
+            p = new Node(key);
+
+            if (root == null)
+                root = p;
+        }
+        else {
+            if (key < p.info)
+                p.left = insert(p.left, key);
+            else
+                p.right = insert(p.right, key);
+        }
+
+        return p; //referencja do wstawianego węzła
+    }
+\end{minted}
+
+\pagebreak
+
+\subsubsection{Usuwanie danego klucza}
+
+\textbf{ITERACYJNIE}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void delete(int key) {
+        Node parent = _getParent(key, root);
+        Node _root = root;
+
+        while (true) {
+            parent = _getParent(key, parent);
+            Node curr = find(key, _root);
+
+            if (curr == null) return;
+
+            //oba poddrzewa puste
+            if (curr.left == null && curr.right == null) {
+                if (curr != root) {
+                    if (parent.left == curr)
+                        parent.left = null;
+                    else
+                        parent.right = null;
+                }
+                else root = null;
+
+                return;
+            } //oba poddrzewa niepuste
+            else if (curr.left != null && curr.right != null) {
+                Node succ = min(curr.right);
+                curr.info = succ.info;
+
+                key = succ.info;
+                _root = curr.right;
+                parent = curr;
+            } //jedno niepuste poddrzewo
+            else {
+                Node child = (curr.left != null) ? curr.left : curr.right;
+
+                if (curr != root) {
+                    if (parent.left == curr)
+                        parent.left = child;
+                    else
+                        parent.right = child;
+                }
+                else root = child;
+
+                return;
+            }
+        }
+    }
+\end{minted}
+
+\textbf{REKURENCYJNIE}\\
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   % fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void delete(int key, Node root) {
+        // baza
+        if (root == null)
+            return root;
+
+        if (key < root.info)
+            root.left = delete(key, root.left);
+        else if (key > root.info)
+            root.left = delete(key, root.right);
+        else {// klucz taki sam jak roota wiec usuwamy go
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
+
+            // węzeł z dwoma potomkami
+            // weź następnik (najmniejszy w prawym)
+            root.info = minValue(root.right);
+
+            // usuń następnik
+            root.right = delete(root.info, root.right);
+        }
+
+        return root;
+    }
+\end{minted}
+
+\pagebreak
+
+% \subsubsection{Wyszukanie danego klucza}
+% \begin{minted}[mathescape,
+%    linenos,
+%    numbersep=5pt,
+%    gobble=2,
+%    frame=lines,
+%    fontsize=\footnotesize,
+%    framesep=2mm]{java}
+%     void search(int key) {
+%         Node p = root; //zaczynamy od korzenia
+
+%         if (p == null) return null;
+
+%         while (p.info != key) { //dopóki nie znaleziono
+%             if (key < p.info)
+%                 p = p.left;
+%             else
+%                 p = p.right;
+
+%             if (p == null) //brak potomka -> nie odnaleziono
+%                 return null;
+%         }
+
+%         return p; //odnalzeiono
+%     }
+% \end{minted}
+
+\subsubsection{Wyszukanie rodzica danego klucza}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void parent(int key) {
+        Node p = root; //zaczynamy od korzenia
+        Node prev = null;
+
+        if (p == null)
+            return null;
+
+        if (p.info == key)
+            return null;
+
+        while (p != null && p.info != key) { //dopóki nie znaleziono
+            prev = p;
+
+            if (key < p.info)
+                p = p.left;
+            else
+                p = p.right;
+
+            if (p == null) //brak potomka -> nie odnaleziono
+                return null;
+        }
+
+        return prev; //odnalzeiono
+    }
+\end{minted}
+
+\subsubsection{Wyszukanie poprzednika danego klucza}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void predecessor(int key) {
+        Node p, q;
+        q = search(key);
+
+        if (q == null) //nie ma klucza zwraca null
+            return null;
+
+        if (q.left != null) { //szukamy maksimum w lewym przedziale
+            p = q.left;
+
+            while (p.right != null)
+                p = p.right;
+
+            return p;
+        }
+
+        p = parent(key);
+
+        while (p != null && q == p.left) {
+            q = p;              //idziemy w górę i szukamy węzeł p
+            p = parent(p.info); //którego prawym następnikiem jest q
+        }
+
+        return p; //zwraca null jeśli nie ma poprzednika
+    }
+\end{minted}
+
+\subsubsection{Wyszukanie następnika danego klucza}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void successor(int key) {
+        Node p, q;
+        q = search(key);
+
+        if (q == null) //nie ma klucza zwraca null
+            return null;
+
+        if (q.right != null) { //szukamy minimum w prawym przedziale
+            p = q.right;
+
+            while (p.left != null)
+                p = p.left;
+
+            return p;
+        }
+
+        p = parent(key);
+
+        while (p != null && q == p.right) {
+            q = p;              //idziemy w górę i szukamy węzeł p
+            p = parent(p.info); //którego prawym następnikiem jest q
+        }
+
+        return p; //zwraca null jeśli nie ma następnika
+    }
+\end{minted}
+
+\pagebreak
+
+\end{document}

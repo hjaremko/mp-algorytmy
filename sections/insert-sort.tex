@@ -1,0 +1,54 @@
+\documentclass[simple-sorts.tex]{subfiles}
+
+\begin{document}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length - 1; i++) {
+            int selected = arr[i];
+            int j = i - 1;
+
+            while (j >= 0 && selected < arr[j]) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+
+            arr[j + 1] = selected;
+        }
+    }
+    \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$\Theta(n^2)$
+        \item \textbf{Średnia:} ~~$\Theta(n^2)$ (ok. $\frac{n^2}{2}$ porównań)
+    \end{itemize}
+
+    \textbf{ZALETY}
+    \begin{itemize}
+        \item \textbf{Stablilny.}
+        \item \underline{Średnio} dwukrotnie szybsza niż inne proste metody.
+        \item Optymalna dla ciągów prawie posortowanych.
+    \end{itemize}
+
+    % \textbf{WADY}
+    % \begin{itemize}
+    %     \item \textbf{Niestablilny.}
+    % \end{itemize}
+
+    \textbf{MOŻLIWE USPRAWNIENIA}
+    \begin{itemize}
+        \item Wyszukiwanie miejsca do wstawienia metodą binarną.
+        \item Na początku w \texttt{arr[0]} ustaw najmniejszy element tablicy,
+            będzie spełniał rolę wartownika, wtedy w wewnętrznej pętli:\\
+            \texttt{while (j >= 0 \&\& v < arr[j]) \{ ... \}}\\
+            wystarczy warunek \texttt{v < a[j]}, oraz pętla wewnętrzna
+            \texttt{for} może zacząć się od \texttt{i = 2}.
+    \end{itemize}
+
+\end{document}

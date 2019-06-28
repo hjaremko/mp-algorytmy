@@ -1,0 +1,37 @@
+\documentclass[../algorytmy.tex]{subfiles}
+
+\begin{document}
+
+    \textbf{ALGORYTM}
+    \begin{enumerate}
+        \item Jeśli w jakimkolwiek momencie realizacji procesu suma wag
+            wybranych elementów będzie równa  wadze docelowej, należy zakończyć
+            działanie (sukces).
+        \item Początkowo wybierany jest pierwszy element. Po wybraniu wyznaczamy
+            nową wagę docelową, jako różnicę dotychczasowej wagi docelowej i
+            wagi pierwszego wybranego elementu. Jeśli suma wag wybranych
+            elementów nie będzie równa  wadze docelowej, należy wybrać następny
+            element.
+        \item Kolejno należy wypróbować wszystkie dostępne kombinacje
+            pozostałych elementów. Należy jednak zauważyć, że w rzeczywistości
+            wcale nie trzeba sprawdzać wszystkich kombinacji gdyż sumowanie
+            można zakończyć w momencie, gdy sumaryczna waga wybranych elementów
+            przekracza wagę docelową.
+        \item Jeśli nie uda się odnaleźć kombinacji elementów o zadanej wadze,
+            to należy odrzucić \underline{pierwszy} element i rozpocząć cały
+            proces od początku, wybierając element kolejny.
+        \item W podobny sposób należy rozpocząć cały proces sprawdzania,
+            wybierając na początku trzeci, czwarty oraz kolejne elementy, aż do
+            momentu przeanalizowania całego zbioru dostępnych elementów. Jeśli
+            sprawdzenie wszystkich możliwości nie zakończy się sukcesem, będzie
+            to oznaczać, że poszukiwane rozwiązanie \underline{nie istnieje}.
+    \end{enumerate}
+
+    Rozwiązująca ten problem metoda rekurencyjna mogłaby wybrać pierwszy element
+    ze zbioru dostępnych elementów, a następnie, jeśli waga jest mniejsza od
+    sumarycznej wagi docelowej, wywołać samą siebie, by sprawdzić sumę wag
+    pozostałych dostępnych elementów.
+
+    \pagebreak
+
+\end{document}

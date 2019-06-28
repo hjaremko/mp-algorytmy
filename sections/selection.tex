@@ -1,0 +1,83 @@
+\documentclass[../algorytmy.tex]{subfiles}
+
+\begin{document}
+
+\subsection{Metoda Hoare}
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Item Select1(S, k) {
+    // znajdowanie k-tego (1 < k < n) co do wielkości elementu
+    // zbioru S, licząc od najmniejszego
+    // (k = 1 - element najmniejszy)
+        a = dowolny element zbioru S;
+        Przeglądnij zbiór S i wyznacz zbiory:
+            S1 = {x in S : x < a};
+            S2 = {x in S : x = a};
+            S3 = {x in S : x > a};
+
+        if (k <= |S1| ) return Select1(S1, k);
+            // szukany element jest k-tym elementem w S1
+        if (k <= |S1| + |S2|) return a;
+            // szukany jest w S2, czyli równy a
+        return Select1(S3, k - |S1| - |S2|);
+            // szukaj w S3, numer odpowiednio mniejszy
+    }
+   \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Czasowa pesymistyczna:} ~~$O(n^2)$ \textit{(jak quicksort)}
+        \item \textbf{Czasowa średnia:} ~~$O(n)$
+    \end{itemize}
+
+\pagebreak
+
+\subsection{Algorytm magicznych piątek}
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Item Select2(S, k) {
+        (1) Jeśli n < p to posortuj i wypisz k-ty element. //baza
+        (2) Podziel S na 5-elementowe podzbiory i ewentualnie
+            jeden co najwyżej 4-elementowy.
+        (3) Posortuj każdy podzbiór oddzielnie.
+        (4) Wyznacz nowy zbiór Q = {środkowe elementy z każdego
+                                    podzbioru}
+        (5) Wyznacz M = Select2(Q, |Q| / 2)
+            //rekurancja, mediana median
+        (6) Dalej jak w metodzie Hoare:
+
+        Przeglądnij zbiór S i wyznacz zbiory:
+            S1 = {x in S : x < M};
+            S2 = {x in S : x = M};
+            S3 = {x in S : x > M};
+
+        if (k <= |S1| ) return Select2(S1, k);
+            // szukany element jest k-tym elementem w S1
+        if (k <= |S1| + |S2|) return M;
+            // szukany jest w S2, czyli równy M
+        return Select2(S3, k - |S1| - |S2|);
+            // szukaj w S3, numer odpowiednio mniejszy
+    }
+   \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Czasowa pesymistyczna:} ~~$O(n)$
+    \end{itemize}
+
+
+\end{document}

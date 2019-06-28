@@ -1,0 +1,94 @@
+\documentclass[simple-sorts.tex]{subfiles}
+
+\begin{document}
+
+    \begin{minted}[mathescape,
+               linenos,
+               % bgcolor=bg,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void bubbleSort(int[] arr) {
+        for (int k = arr.length - 1; k >= 1; k--) {
+            for (int j = 0; j < k; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(j, j + 1);
+                }
+            }
+        }
+    }
+    \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$\Theta(n^2)$
+        \item \textbf{Średnia:} ~~$\Theta(n^2)$ (ok. $\frac{n^2}{2}$
+            porównań)
+    \end{itemize}
+
+    \textbf{ZALETY}
+    \begin{itemize}
+        \item \textbf{Stabilny.}
+        \item W miejscu.
+    \end{itemize}
+
+    \textbf{WADY}
+    \begin{itemize}
+        \item Najmniej efektywne.
+    \end{itemize}
+
+    \textbf{MOŻLIWE USPRAWNIENIA}
+    \begin{itemize}
+        \item Ustawiać koniec wewnętrznej pętli na miejsce ostatnio wykonanej
+            zamiany.
+        \item Zapamiętanie, czy  w pętli wewnętrznej potrzebna była zamiana.
+        \item \textbf{Cocktail Shaker Sort} - kolejne fazy wykonuje się na
+            przemian, rozpoczynając porównania elementów, raz od początku -
+            drugi raz od końca tablicy. Pozwala to przyśpieszenie sortowania
+            w przypadku tablic, np. \texttt{9, 1, 2, 3, 4, 5, 0}.
+    \end{itemize}
+
+    \subsection{Cocktail Shaker Sort}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void cocktailSort(int[] arr) {
+        int bottom = 0;
+        int top = arr.length - 1;
+        boolean swapped = true;
+
+        while (swapped == true) {
+            swapped = false;
+            //int lastSwap = bottom;
+
+            for (int i = bottom; i < top; i++) {
+                if (arr[i] > arr[i + 1]) {
+                    swap(arr, i, i + 1);
+                    swapped = true;
+                    // lastSwap = i;
+                }
+            }
+
+            top--;
+            // top = lastSwap;
+            // lastSwap = top;
+
+            for (int i = top; i > bottom; i--) {
+                if (arr[i] < arr[i - 1]) {
+                    swap(arr, i, i - 1);
+                    swapped = true;
+                    // lastSwap = i;
+                }
+            }
+
+            bottom++;
+            // bottom = lastSwap;
+        }
+    }
+    \end{minted}
+
+\end{document}

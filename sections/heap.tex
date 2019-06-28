@@ -1,0 +1,169 @@
+\documentclass[algorytmy.tex]{subfiles}
+
+\begin{document}
+
+\subsection{Definicja}
+    Jest to drzewo binarne, w którym:
+    \begin{itemize}
+        \item dla każdego węzła zachodzi \textbf{warunek kopca}
+        \begin{itemize}
+            \item \texttt{key(v.parent) >= key(v)}  ~~~~\textit{(max-kopiec)}
+        \end{itemize}
+        \item wszystkie poziomy, za wyjątkiem ostatniego, są całkowicie
+              wypełnione
+        \item ostatni poziom jest wypełniony z lewej strony
+\end{itemize}
+
+\subsection{Implementacja}
+    Postawową implementacją jest \textbf{tablica}.
+    \begin{itemize}
+        \item \textbf{Lewym} potomkiem węzła \texttt{a[i]} jest
+              \texttt{a[2 * i + 1]}
+        \item \textbf{Prawym} potomkiem węzła \texttt{a[i]} jest
+              \texttt{a[2 * i + 2]}
+        \item \textbf{Przodkiem} węzła \texttt{a[i]} jest \texttt{a[(i - 1) / 2]}
+    \end{itemize}
+
+% \pagebreak
+
+\subsection{Sortowanie przez kopcowanie}
+
+        \textbf{ZŁOŻONOŚĆ:  } $\Theta(n \log{n})$
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   % fontsize=\footnotesize,
+   framesep=2mm]{java}
+    void heapsort(int n) {
+        // tworzenie kopca w tablicy a
+        // rozpoczynamy analizę od ostatniego elementu,
+        // który ma dzieci
+        for (int k = (n - 2) / 2; k >= 0; k--)
+            downheap(k, n);
+
+        //usuwanie z kopca
+        while (n > 0) {
+            swap(a[0], a[--n]);
+            downheap(0, n);
+        }
+    }
+\end{minted}
+
+\subsection{Przesiewanie w górę}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    // podobnie jak podczas sortowania przez wstawianie
+    // listą jest ścieżką od węzła k do korzenia
+    void upheap(int k) {
+        int i = (k - 1) / 2;  // indeks przodka elementu a[k]
+        int tmp = a[k];
+
+        while (k > 0 && a[i] < tmp) {
+            a[k] = a[i];
+            k = i;           // przenieść węzeł w dół
+            i = (i - 1) / 2; // przejdź do przodka
+        }
+       // teraz element a[k] na swoje miejsce
+       a[k] = tmp;
+    }
+\end{minted}
+
+\subsection{Przesiewanie w dół}
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   fontsize=\footnotesize,
+   framesep=2mm]{java}
+    // podobnie jak wstawianie do listy w insertsort
+    // lista (ścieżka do liścia) wyznaczana dynamicznie
+    void downheap(int k, int n) {
+        int j = 0;
+        int tmp = a[k];
+
+        while (k < n / 2) {
+            j = 2 * k + 1; // indeks lewego potomka a[k]
+
+            // wybierz większy z potomków
+            if (j < n - 1 && a[j] < a[j + 1])
+                j++;
+
+            if (tmp >= a[j])
+                break; // warunek kopca OK
+
+            // w przeciwnym wypadku
+            // przesuń aktualny element do góry
+            a[k] = a[j];
+            k = j;
+        }
+       // teraz element a[k] na swoje miejsce
+       a[k] = tmp;
+    }
+\end{minted}
+
+\subsection{Kolejka priorytetowa}
+    \subsubsection{Wstawianie do kolejki}
+        \textbf{ZŁOŻONOŚĆ:  } $\Theta(\log{n})$
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   % fontsize=\footnotesize,
+   framesep=2mm]{java}
+    boolean insert(int x, int n) {
+        if (n == size)
+            return false;
+
+        a[n] = x;
+        upheap(n++);
+
+        return true;
+    }
+\end{minted}
+
+    \subsubsection{Odczyt elementu największego}
+        \textbf{ZŁOŻONOŚĆ:  } $\Theta(1)$
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   % fontsize=\footnotesize,
+   framesep=2mm]{java}
+    int getMax() {
+        return a[0];
+    }
+\end{minted}
+
+    \subsubsection{Usuwanie elementu największego}
+        \textbf{ZŁOŻONOŚĆ:  } $\Theta(\log{n})$
+\begin{minted}[mathescape,
+   linenos,
+   numbersep=5pt,
+   gobble=2,
+   frame=lines,
+   % fontsize=\footnotesize,
+   framesep=2mm]{java}
+    int deleteMax(int n) {
+        // zakładamy, że kopiec ma n elementów (n > 0)
+        // wstaw ostatni liść w miejsce korzenia
+        // i przesiej w dół
+        int root = a[0];
+        a[0] = a[--n];
+        downheap(0, n);
+        return root;
+    }
+\end{minted}
+
+
+
+\end{document}

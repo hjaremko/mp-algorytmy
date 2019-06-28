@@ -1,0 +1,75 @@
+\documentclass[advanced-sorts.tex]{subfiles}
+
+\begin{document}
+    \textbf{ZAŁOŻENIA}
+    \begin{itemize}
+        \item Ciąg kluczy do posortowania to
+            \texttt{a[0], a[1], ..., a[n - 1]} \\ typu
+            \underline{rzeczywistego}.
+        \item Wartość każdego klucza należy do uporządkowanego zbioru np. liczb
+            rzeczywistych: $\{ q_1 < q_2 < \ldots < q_m \}$, to znaczy\\
+            $ \forall ~~ i \in \{ 0, \ldots, n - 1 \} ~~~ \exists ~~ j \in
+            \{ 1, \ldots, m \} : \mathtt{a[i]} = q_j $
+    \end{itemize}
+
+    \textbf{OPIS METODY}
+    \begin{enumerate}
+        \item Utwórz $m$ kubełków (np. list), początkowo pustych.
+        \item Dla \texttt{ i = 0, ..., n - 1 }, jeśli \texttt{a[i] = }$q_j$
+            to wstaw \texttt{a[i]} do kubełka o numerze $j$
+            \textit{(wyszukiwanie binarne)}.
+        \item Uczyń tablicę \texttt{a[]} pustą.
+        \item Kolejno dla \texttt{ j = 1, ..., m } przepisz zawartość kubełka $j$
+            do tablicy \texttt{a[]} (tak więc w \texttt{a[]} pojawią się
+            najpierw klucze o wartości $q_1$, potem klucze o wartości $q_2$,
+            itd.).
+    \end{enumerate}
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    double Q[m];  // Q = {q1, q2, ..., qm}
+    int count[m]; // tablica liczników
+
+    for (int j = 0; j < m; j++)
+        count[j] = 0;
+
+    for (int i = 0; i < n; i++) {
+        //m-numer kubełka do którego należy a[i]
+        int m = binary_search(a[i], Q);
+        count[m]++;
+    }
+
+    for (int j = 0; j < m; j++) {
+        for (int p = 0; p < count[j]; p++)
+            wypisz(Q[j]);
+    }
+   \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Czasowa:} ~~$O(n \log_2 m)$
+        \item \textbf{Pamięciowa:} ~~$O(n + m)$
+    \end{itemize}
+
+    % \textbf{ZALETY}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+    % \textbf{WADY}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+    % \textbf{MOŻLIWE USPRAWNIENIA}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+\end{document}

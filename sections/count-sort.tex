@@ -1,0 +1,71 @@
+\documentclass[advanced-sorts.tex]{subfiles}
+
+\begin{document}
+    \textbf{ZAŁOŻENIA}
+    \begin{itemize}
+        \item Elementy tablicy
+            \texttt{a[0], a[1], ..., a[n - 1]} przyjmują\\
+            \underline{wartości nieujemne i mniejsze niż \textbf{m}}, to znaczy
+            dla\\ $i = 0, \ldots, n - 1  ~~~ \mathtt{a[i]} \in \{ 0, 1, \ldots, m - 1 \}$
+        \item Tablice pomocnicze: \texttt{b[n], count[m]}
+    \end{itemize}
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    for (int j = 0; j < m; j++) count[j] = 0;
+
+    for (int i = 0; i < n; i++)
+        count[a[i]]++;
+
+    for (int j = 1; j < m; j++)
+        count[j] += count[j - 1];
+
+    for (int i = n - 1; i >= 0; i--)
+        b[--count[a[i]]] = a[i];
+
+    for (int i = 0; i < n; i++) a[i] = b[i];
+    \end{minted}
+
+    \textbf{OPIS METODY}
+    \begin{enumerate}
+        \item Zerowanie tablicy \texttt{count[]}.
+        \item Zliczanie - ile jest elementów w tablicy \texttt{a[]} o danej
+            wartości.
+        \item Obliczanie górnych granic obszarów wynikowych dla poszczególnych
+            wartości.
+        \item \underline{Przepisz od końca} \texttt{a[]} do \texttt{b[]} na
+            właściwe miejsca \textit{(zapewnia \textbf{stabilność})}.
+        \item Opcjonalnie, mozna przepisać \texttt{b[]} z powrotem do
+            \texttt{a[]}.
+    \end{enumerate}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Czasowa:} ~~$\Theta(n + m)$
+        % \item \textbf{Pamięciowa:} ~~$O(n + m)$
+    \end{itemize}
+
+    % \textbf{ZALETY}
+    % \begin{itemize}
+    %     \item \textbf{Stabilność.}
+    % \end{itemize}
+
+    \textbf{WADY}
+    \begin{itemize}
+        \item Pamięć pomocnicza wielkości $\Theta(n + m)$.
+        \item Wartości elementów muszą być liczbami całkowitymi ograniczonej
+            wielkości.
+    \end{itemize}
+
+    % \textbf{MOŻLIWE USPRAWNIENIA}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+\end{document}

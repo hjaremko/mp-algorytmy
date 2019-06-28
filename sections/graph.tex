@@ -1,0 +1,484 @@
+\documentclass[algorytmy.tex]{subfiles}
+
+\begin{document}
+
+% \subsection{Terminologia}
+% \begin{itemize}
+%     \item \textbf{Stopień wierzchołka} \texttt{v} \textit{(deg v)}
+%         \begin{itemize}
+%             \item Liczba krawędzi grafu incydentnych do wierzchołka. \\
+%             Jest on równy sumie liczb wszystkich krawędzi wchodzących i
+%             wychodzących. Każdą pętlę liczy się jak dwie krawędzie.\\
+
+%             W grafach skierowanych można wyróżnić stopień wchodzący i
+%             wychodzący.
+%         \end{itemize}
+%     \item \textbf{Stopień grafu}
+%         \begin{itemize}
+%             \item Maksymalny stopień wierchołka w grafie.
+%         \end{itemize}
+
+% \end{itemize}
+
+% \subsection{Reprezentacja}
+%     \subsubsection{Macierz sąsiedztwa}
+%         \paragraph{Implementacja}
+%     \subsubsection{Listy sąsiedztwa}
+%         \paragraph{Implementacja}
+
+\subsection{Przeglądanie wszerz (BFS)}
+
+    % \textbf{ZAŁOŻENIA}
+    % \begin{itemize}
+    %     \item Wszystkie wierzchołki są osiągalne z wierzchołka \texttt{s}.
+    %     % \item Dany graf $G = (V, E)$, ~~$L(u)$ - lista węzłów przyległa do u
+    % \end{itemize}
+
+    \textbf{OPIS METODY}\\
+
+    Startujemy z \texttt{s}, chcemy dotrzeć do wszystkich wierzchołków
+    następującej kolejności: najpierw wierzchołki odległe od startowego o $1$,
+    następnie o $2$, następnie o $3$, itd.
+    % \begin{itemize}
+    %     \item najpierw wierzchołki odległe od startowego o $1$
+    %     \item następnie wierzchołki odległe o $2$
+    %     \item następnie wierzchołki odległe o $3$, itd
+    % \end{itemize}
+
+    Podstawa realizacji - \textbf{kolejka}, która przechowuje węzły do których
+    już dotarliśmy, ale dla których jeszcze nie badaliśmy możliwych wyjść
+    prowadzących dalej. \\
+
+    \textbf{ZŁOŻONOŚĆ:} ~~$\Theta(n + m)$
+    % \begin{itemize}
+        % \item \textbf{Czasowa:} ~~$\Theta(n + m)$
+        % \item \textbf{Pamięciowa:} ~~$O(n + m)$
+    % \end{itemize}
+
+    % \pagebreak
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void breadthFirstSearch(Graph G, Node s) {
+        G.vertexList[s].visited = true; // oznacz jako odwiedzony
+        G.displayVertex(s);               // wyświetl
+
+        Queue Q = new Queue();
+        Q.insert(s); // wstaw do kolejki
+        int v = 0;
+
+        while (!Q.isEmpty()) { // do opróżnienia kolejki
+            int u = Q.first();
+
+            // dopóki nie ma odwiedzonych sąsiadów
+            // do v pobierz kolejnego sąsiada u
+            while ((v = G.getAdjUnvisitedVertex(u)) != -1) {
+                G.vertexList[v].visited = true; // oznacz v jako odwiedzony
+                G.displayVertex(v);
+                Q.insert(v);
+            }
+
+            Q.delete(); // usuń u
+        }
+    }
+    // zwraca nie odwiedzony wierzchołek przyległy do v
+    int getAdjUnvisitedVertex(int v) {
+        for (int j = 0; j < nVerts; j++)
+            if (adjMat[v][j] == 1 && vertexList[j].visited == false)
+                return j;
+        return -1;
+    }
+    \end{minted}
+
+\pagebreak
+
+\subsection{Przeglądanie w głąb (DFS)}
+
+    % \textbf{ZAŁOŻENIA}
+    % \begin{itemize}
+    %     \item Wszystkie wierzchołki są osiągalne z wierzchołka \texttt{s}.
+    %     \item Dany graf $G = (V, E)$, $L(u)$ - lista węzłów przyległa do u
+    % \end{itemize}
+
+    \textbf{OPIS METODY}\\
+
+    Idź do nowych wierzchołków najdalej jak się da, jeśli dalej nie można to
+    wycofaj się do poprzedniego i próbuj inną krawędzią.
+
+    Podstawa realizacji - \textbf{stos}, który można zrealizować niejawnie,
+    za pomocą rekurencji.\\
+
+    \textbf{ZŁOŻONOŚĆ:} ~~$\Theta(n + m)$ \\
+    % \begin{itemize}
+        % \item \textbf{Czasowa:} ~~$\Theta(n + m)$
+        % \item \textbf{Pamięciowa:} ~~$O(n + m)$
+    % \end{itemize}
+
+    \textbf{PSEUDOKOD} \textit{(iteracyjnie)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void depthFirstSearch(Graph G) { //rozpocznij od węzła 0
+        G.vertexList[0].visited = true;
+        G.displayVertex(0);
+
+        Stack S = new Stack();
+        S.push(0);
+
+        while (!S.isEmpty()) {
+            // pobierz nie odwiedzony węzeł przyległy do
+            // szczytowego elementu stosu (u)
+            int v = G.getAdjUnvisitedVertex(S.top());
+
+            if (v == -1)
+                S.pop();
+            else { // jeżeli istnieje oznacz v
+                G.vertexList[v].visited = true;
+                G.displayVertex(v);
+                S.push(v);
+            }
+        }
+    }
+    \end{minted}
+
+    \textbf{PSEUDOKOD} \textit{(rekurencyjnie)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void depthFirstSearch(Graph G, int v) {
+        G.vertexList[v] = true;
+        G.displayVertex(v);
+        int i = 0;
+
+        while ((i = G.getAdjUnvisitedVertex(v)) != -1) {
+            dfs(G, i);
+        }
+    }
+    \end{minted}
+
+\subsection{Przeglądanie w głąb (DFS) (Cormen)}
+    \textbf{PSEUDOKOD}% \textit{(Cormen)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    DFS(G) {
+        for each u in V do { //inicjalizacja
+            color[u] = white;
+            P[u] = null; //poprzednik w drzewe
+        }
+
+        time = 0; //globalna
+
+        for each u in V do {
+            if (color[u] == white)
+                DFS-Visit(u);
+        }
+    }
+
+    DFS-Visit(u) {
+        color[u] = grey;
+        d[u] = ++time;
+
+        //badaj (u, v)
+        for each v in L[u] do {
+            if (color[v] == white) {
+                P[v] = u;
+                DFS-Visit(v);
+            }
+        }
+
+        color[u] = black;
+        f[u] = ++time;
+    }
+    \end{minted}
+
+
+\begin{itemize}
+    \item \texttt{L[]} - lista sąsiedztwa
+    \item \texttt{P[]} - poprzednik w drzewie
+    \item \texttt{d[]} - czas odwiedzenia
+    \item \texttt{f[]} - czas przetworzenia
+\end{itemize}
+
+\pagebreak
+
+\subsection{Minimalne drzewo rozpinające (MST)}
+
+    \textbf{OPIS METODY} \\\\
+    \textbf{Minimalne drzewo rozpinające} to podgraf o \underline{najmniejszej}
+    \underline{liczbie krawędzi}
+    \underline{wymaganej} \underline{do połączenia w zadanym grafie}
+    (spójnym/silnie spójnym). Dla danego grafu spójnego istnieje wiele różnych
+    minimalnych drzew rozpinających.\\
+
+    \textbf{PSEUDOKOD} \textit{(iteracyjnie)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void minimalSpanningTree(Graph G) {
+        G.vertexList[0].visited = true;
+
+        Stack S = new Stack();
+        S.push(0);
+
+        while (!S.isEmpty()) {
+            int u = S.top();
+            // pobierz nie odwiedzony węzeł przyległy do
+            // szczytowego elementu stosu (u)
+            int v = G.getAdjUnvisitedVertex(u);
+
+            if (v == -1)
+                S.pop();
+            else { //jeżeli istnieje
+                G.vertexList[v].visited = true;
+                S.push(v);
+
+                // wyświelt krawędź od u do v
+                G.displayVertex(u);
+                G.displayVertex(v); //print(',');
+            }
+        }
+    }
+    \end{minted}
+
+\pagebreak
+\subsection{Test acykliczności grafu skierowanego}
+
+\textbf{OPIS METODY}
+\begin{itemize}
+    \item Graf zorientowany zawiera cykl wtedy i tylko wtedy gdy w dowolnym
+        drzewie \textbf{DFS} istnieje krawędź \textbf{wsteczna}.
+    \item To znaczy, gdy podczas przeglądania grafu metodą \textbf{DFS}
+        odwiedzimy wierzchołek pokolorowany na \textbf{szaro} to graf zawiera
+        cykl.
+\end{itemize}
+
+    \textbf{PSEUDOKOD} \textit{(Cormen)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    DFS(G) {
+        for each u in V do { //inicjalizacja
+            color[u] = white;
+        }
+
+        for each u in V do {
+            if (color[u] == white)
+                if (DFS-Visit(u) == true)
+                    return true;
+        }
+
+        return false;
+    }
+
+    DFS-Visit(u) {
+        color[u] = grey;
+
+        //badaj (u, v)
+        for each v in L[u] do {
+            if (color[v] == white) {
+                if (DFS-Visit(v) == true)
+                    return true;
+            }
+            else if (color[v] == grey) {
+                return true;
+            }
+        }
+
+        color[u] = black;
+        return false;
+    }
+    \end{minted}
+
+\pagebreak
+
+
+\subsection{Wyznaczanie spójnych składowych grafu nieskierowanego}
+\begin{itemize}
+    \item Należy obliczyć \texttt{ss[u] = k} - numer spójnej składowej
+    zawierającej wierzchołek \texttt{u}, dla każdego $u \in V$ wierzchołki w tej
+    samej składowej dostaną jeden numer \texttt{ss}.
+    \item Zmienną globalną \texttt{k}, zerowaną na początku, zwiększamy o 1 przy
+    każdym wywołaniu funkcji \texttt{DFS-Visit} z głównej pętli w algorytmie
+    DFS.
+    \item Na początku funkcji \texttt{DFS-Visit} wykonujemy instrukcję
+    \texttt{ss[u] = k}.
+\end{itemize}
+
+Do obliczenia \texttt{ss[]} w algorytmie \textbf{DFS} można opuścić:
+\begin{itemize}
+    \item trzeci kolor (wystarczą dwa)
+    \item poprzednik w drzewie, \texttt{P[]}
+    \item tablice \texttt{d[]}, \texttt{f[]}.
+\end{itemize}
+
+Oba powyższe problemy można rozwiązać również wykorzystując algorytm
+\textbf{BFS}.
+
+    \textbf{PSEUDOKOD} \textit{(Cormen)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    DFS(G) {
+        for each u in V do //inicjalizacja
+            color[u] = white;
+
+        k = 0; //globalna
+
+        for each u in V do {
+            if (color[u] == white) {
+                k++;
+                DFS-Visit(u);
+            }
+        }
+    }
+
+    DFS-Visit(u) {
+        ss[u] = k;
+        color[u] = grey;
+
+        for each v in L[u] do {
+            if (color[v] == white)
+                DFS-Visit(v);
+        }
+    }
+    \end{minted}
+
+\pagebreak
+
+\subsection{Sortowanie topologiczne}
+    \textbf{OPIS METODY}
+    \begin{itemize}
+        \item Zastosuj algorytm \texttt{DFS(G)}, wpisując wierzchołek \texttt{u}
+              na początek listy w momencie jego kolorowania na \textbf{czarno}.
+    \end{itemize}
+
+    \textbf{PSEUDOKOD} \textit{(Cormen)}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    DFS(G) {
+        for each u in V do //inicjalizacja
+            color[u] = white;
+
+        for each u in V do {
+            if (color[u] == white) {
+                if (DFS-Visit(u) == false)
+                    return;
+            }
+        }
+    }
+
+    DFS-Visit(u) {
+        color[u] = grey;
+
+        for each v in L[u] do {
+            if (color[v] == white) {
+                if (DFS-Visit(v) == false)
+                    return false;
+            }
+            else if (color[u] == grey)
+            //graf zawiera cykl -> nie można posortować!
+                return false;
+        }
+
+        color[u] = black;
+        print(u);
+        return true;
+    }
+    \end{minted}
+
+\pagebreak
+
+\subsection{Średnica grafu nieskierowanego}
+    \textbf{OPIS METODY}
+    \begin{itemize}
+        \item Obliczamy największą odległość dla każdego wierzchołka stosując
+            algorytm \textbf{BFS}.
+    \end{itemize}
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+
+    int bfs(Graph G, Vertex s) {
+        for each u in G.V {
+            color[u] = white;
+            dist[u] = Integer.MAX_VALUE; //infinity
+        }
+
+        color[s] = grey;
+        dist[s] = 0;
+        Q.push(s);
+
+        while (!Q.isEmpty()) {
+            int u = Q.pop();
+
+            for each v in L[u] {
+                if (color[v] == white) {
+                    color[v] = grey;
+                    dist[v]++;
+                    Q.push(v);
+                }
+            }
+        }
+
+        return maxValue(dist);
+    }
+
+    int diameter() {
+        int result = 0;
+
+        for (int i = 0; i < n; i++) {
+            int d = bfs(i);
+
+            if (d > result)
+                d = result;
+        }
+
+        return result;
+    }
+    \end{minted}
+
+\pagebreak
+
+\end{document}

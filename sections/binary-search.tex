@@ -1,0 +1,64 @@
+\documentclass[search-algorithms.tex]{subfiles}
+
+\begin{document}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void binarySearch(int key) {
+        int begin = 0;
+        int end = n - 1;
+
+        while (begin <= end) {
+            int current = (begin + end) / 2;
+
+            if (arr[current] == key) {
+                return current;
+            }
+            else {
+                if (arr[current] < key)
+                    begin = current + 1;
+                else
+                    end = current - 1;
+            }
+        }
+
+        return -1;
+    }
+    \end{minted}
+    % \pagebreak
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$\Theta(\log_2 n)$ (optymalne)
+        \item \textbf{Średnia:} ~~$\Theta(\log_2 n)$
+    \end{itemize}
+
+    % \textbf{MOŻLIWE USPRAWNIENIA}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+    % \pagebreak
+    \subsection{Wyszukiwanie interpolacyjne}
+    \begin{itemize}
+        \item Zakładamy \underline{liniowy rozkład wartości elementów.}
+    \end{itemize}
+
+    \begin{equation*}
+        \frac{curr - low}{upp - low} =
+        \frac{x - \mathtt{a[low]}}{\mathtt{a[upp]} - \mathtt{a[low]}}
+    \end{equation*}
+
+    \begin{equation*}
+        curr = low + (x - \mathtt{a[low]})
+        \frac{upp - low}{\mathtt{a[upp]} - \mathtt{a[low]}}
+    \end{equation*}
+
+    % \subsection{Wyszukiwanie binarne pierwszego/ostatniego wystąpienia} %TODO
+
+
+\end{document}

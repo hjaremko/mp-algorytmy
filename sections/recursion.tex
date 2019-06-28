@@ -1,0 +1,19 @@
+\documentclass[../algorytmy.tex]{subfiles}
+
+\begin{document}
+    % Przekształcenie algorytmu rekurencyjnego często bazuje na wykorzystaniu
+    % stosu i polega na symulacji działania metod rekurencyjnych.
+
+    Po wywołaniu metody jej rekord aktywacji reprezentujący aktualny stan
+    wywoływanej funkcji i zawierający:
+    \begin{itemize}
+        \item obiekty lokalne – zmienne, stałe, parametry
+        \item adres powrotu (aktualny licznik rozkazów)
+    \end{itemize}
+    jest wstawiany na stos i następuje skok do początku kodu metody.
+    Bezpośrednio przed zakończeniem działania metody ze stosu pobierany jest
+    rekord aktywacji, a następnie są odtwarzane obiekty lokalne z przed
+    wywołania i następuje skok do adresu powrotu w pobranym rekordzie.
+
+    \pagebreak
+\end{document}

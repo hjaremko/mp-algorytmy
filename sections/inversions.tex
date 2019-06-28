@@ -1,0 +1,59 @@
+\documentclass[../algorytmy.tex]{subfiles}
+
+\begin{document}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    long numInversion(int left, int right) //mergeSort
+    { // wywołanie: numInversion(0, size - 1)
+        long invs = 0;
+
+        if (right > left) {
+            int mid = (left + right) / 2;
+
+            invs  = numInversion(left, mid); // ilosc z lewej i prawej czesci
+            invs += numInversion(mid + 1, right);
+            invs += merge(left, mid, right); // ilosc inwersji z laczenia
+        }
+
+        return invs;
+    }
+
+    long merge(int left, int mid, int right)
+    {
+        copyToTemp(from left to mid); //kopiujemy tylko połowę
+
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        long invs = 0;
+
+        while (i <= mid && j <= right) {
+            if (temp[i] <= data[j])
+                data[k++] = temp[i++];
+            else {//temp[i] > data[j]
+                data[k++] = data[j++];
+
+                invs += mid + 1 - i; //skoro lewa i prawa polowa sa
+                // posortowane to pozostale elementy w lewej polowie
+                // sa wieksze od data[j], zatem jest mid + 1 - i inwersji
+            }
+        }
+
+        while (i <= mid) //przepisz pozostale
+            data[k++] = temp[i++];
+
+        while (j <= right)
+            data[k++] = data[j++];
+
+        return invs;
+    }
+    \end{minted}
+
+\end{document}

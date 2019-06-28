@@ -1,0 +1,76 @@
+\documentclass[advanced-sorts.tex]{subfiles}
+
+\begin{document}
+    \textbf{ZAŁOŻENIA}
+    \begin{itemize}
+        \item Jeśli klucze \texttt{a[i]} są długie, to znaczy ich zakres
+            (parametr $m$) jest zbyt duży do zastosowania \textbf{count sort},
+            albo klucze są złożone z kilku składowych.
+    \end{itemize}
+
+    \textbf{PSEDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void radixSort() {
+        for (int k = 0; k < b; k++)
+            countSort(a, k);
+    }
+   \end{minted}
+
+   Funkcja \texttt{countSort(a, k)} używa jako klucza $k$-ty bajt elementu
+   \texttt{a[i]}.\\
+
+    \textbf{OPIS METODY}
+    \begin{enumerate}
+        \item Podziel klucze na kilka części, na przykład:
+            \begin{itemize}
+                \item kolejne cyfry dziesiętne,
+                \item kolejne fragmenty z zapisu bitowego klucza
+            \end{itemize}
+        \item Zastosuj \textbf{count sort} tyle razy, ile jest części, każdą z
+            nich traktująć jako klucz w jednym przebiegu.
+    \end{enumerate}
+
+    Ważna jest kolejność wykonywania \textbf{count sort} dla części kluczy
+    \underline{od najmniej} \underline{znaczących} poczynając, na najbardziej
+    znaczących kończąc.\\
+
+    Załóżmy, że klucze \texttt{a[i]} są $b$-bajtowe
+    \begin{itemize}
+        \item \texttt{a[i][k]} - oznacza $k$-ty bajkt klucza \texttt{a[i]},
+            $k = b - 1, \ldots, 0$.
+        \item \texttt{a[i][0]} - to bajt \underline{najmniej znaczący} klucza
+            \texttt{a[i]}.
+        \item \texttt{m = 256}, bo tyle jest możliwych wartości klucza
+            1-bajtowego.
+    \end{itemize}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Czasowa:} ~~$\Theta(b \cdot (n + m))$
+        \item \textbf{Pamięciowa:} ~~$\Theta(n + m)$
+    \end{itemize}
+
+    % \textbf{ZALETY}
+    % \begin{itemize}
+    %     \item \textbf{Stabilność.}
+    % \end{itemize}
+
+    % \textbf{WADY}
+    % \begin{itemize}
+    %     \item Pamięć pomocnicza wielkości $\Theta(n + m)$.
+    %     \item Wartości elementów muszą być liczbami całkowitymi ograniczonej
+    %         wielkości.
+    % \end{itemize}
+
+    % \textbf{MOŻLIWE USPRAWNIENIA}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+\end{document}

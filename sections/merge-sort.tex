@@ -1,0 +1,89 @@
+\documentclass[advanced-sorts.tex]{subfiles}
+
+\begin{document}
+
+    \textbf{REKURENCYJNIE}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
+
+            mergeSort(arr, left, middle);
+            mergeSort(arr, middle + 1, right);
+            merge(arr, left, middle, right);
+        }
+    }
+
+    void merge(int[] arr, int left, int mid, int right) {
+        int[] temp = new int[arr.length];
+
+        for (int i = left; i <= right; i++)
+            temp[i] = arr[i];
+
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        while (i <= mid && j <= right) {
+            if ( temp[i] <= temp[j] )
+                arr[k++] = temp[i++];
+            else
+                arr[k++] = temp[j++];
+        }
+
+        while (i <= mid) // && i < n) w iteracyjnym
+            arr[k++] = temp[i++];
+        while (j <= right) // nie trzeba w iteracyjnym
+            arr[k++] = temp[j++];
+
+    }
+    \end{minted}
+    \pagebreak
+
+    \textbf{ITERACYJNIE}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void mergeSort(int[] arr, int left, int right) {
+        for (int size = 1; size <= n - 1; size = 2 * size) {
+            for (int left = 0; left < n - 1; left += 2 * size) {
+                int mid = min(left + size - 1, arr.length - 1);
+                right = min(left + 2 * size - 1, arr.length - 1);
+
+                merge(left, mid, right);
+            }
+        }
+    }
+    \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$\Theta(n \log_2 n)$
+        \item \textbf{Pamięciowa:} ~~$\Theta(n)$
+    \end{itemize}
+
+    \textbf{ZALETY}
+    \begin{itemize}
+        \item \textbf{Stabilna.}
+    \end{itemize}
+
+    \textbf{WADY}
+    \begin{itemize}
+        \item Pamięć robocza rozmiaru $\Theta(n)$.
+        \item Czasochłonne przepisywanie elementów.
+    \end{itemize}
+
+    % \textbf{MOŻLIWE USPRAWNIENIA}
+    % \begin{itemize}
+    %     \item .
+    % \end{itemize}
+
+\end{document}

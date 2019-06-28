@@ -1,0 +1,152 @@
+\documentclass[advanced-sorts.tex]{subfiles}
+
+\begin{document}
+
+    \textbf{REKURENCYJNIE}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void quickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int pivot = partition(arr, left, right);
+
+            quickSort(left, pivot - 1);
+            quickSort(pivot + 1, right);
+        }
+    }
+    \end{minted}
+
+    \textbf{ITERACYJNIE}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void quickSort(int[] arr, int left, int right) {
+        while (left < right || !stack.isEmpty()) {
+            if (left < right) {
+                int pivot = partition(arr, left, right);
+
+                //na stos prawe podzadanie
+                stack.push(right);
+
+                right = pivot - 1;
+            }
+            else {
+                left = right + 2;
+                right = stack.pop();
+            }
+        }
+    }
+    \end{minted}
+
+    \pagebreak
+
+    \textbf{HOARE}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+
+    int partition(int[] arr, int left, int right) {
+        int i = left - 1;
+        int j = right;
+        int x = arr[right]; //ostatni elemnt jest dzielący
+
+        while (true) {
+            while (arr[++i] < x);
+            while (j > left && arr[--j] > x);
+
+            if (i >= j)
+                break;
+            else
+                swap(i, j);
+        }
+
+        swap(i, right);
+        return i;
+    }
+    \end{minted}
+
+    \textbf{LOMUTO}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    int partition(int[] arr, int left, int right) {
+        int i = left - 1;
+        int x = arr[right]; //ostatni element jest dzielący
+
+        for (int j = left; j < right; j++) {
+            if (arr[j] <= x) {
+                swap(++i, j);
+            }
+        }
+
+        swap(i + 1, right);
+        return i + 1;
+    }
+    \end{minted}
+
+    \pagebreak
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Optymistyczna:} ~~$\Theta(n \log_2 n)$
+        \item \textbf{Średnia:} ~~$\Theta(n \log_2 n)$
+        \item \textbf{Pesymistyczna:} ~~$\Theta(n^2)$
+        \item \textbf{Pamięciowa:} Konieczność stosu:~~$\Theta(n)$,
+            usprawniony~~$\Theta(\log_2 n)$
+    \end{itemize}
+
+    \textbf{ZALETY}
+    \begin{itemize}
+        \item Jest to w ogólnym przypadku tablicy najszybszy algorytm
+            wykorzystujący operację porównywania elementów.
+    \end{itemize}
+
+    \textbf{WADY}
+    \begin{itemize}
+        \item \textbf{Niestabilność.}
+        \item Koszt $\Theta(n^2)$ w przypadku pesymistycznym.
+    \end{itemize}
+
+    \textbf{MOŻLIWE USPRAWNIENIA}
+    \begin{itemize}
+        \item W przypadku małych podzadań (np. \texttt{n <= 20}) sortuj prostą
+            metodą (zalecana metoda przez wstawianie).
+        \item Usprawnienia wyboru pivota:
+            \begin{itemize}
+                \item \textbf{Randomizacja} - wszystkie możliwe wielkości
+                    podzadań są jednakowo prawdopodobne.
+                \item \textbf{Mediana trzech elementów} - wybierz środkowy
+                    element (medianę) spośród trzech elementów
+                    \texttt{A[L], A[(L+R)/2], A[R]} i zamień go z \texttt{A[R]}
+                    (3 porównania więcej). Ta metoda optymalnie radzi sobie z
+                    ciągiem uporządkowanym, ale nadal można skonstruować
+                    dowolnie długie ciągi, które wymagają czasu $\Omega(n^2)$.
+                    Oczekiwana liczba porównań w tym wariancie wynosi około
+                    $1.2 n \log_2 n$, ale w praktyce czas wykonania zwykle jest
+                    gorszy.
+            \end{itemize}
+        \item Można porównywać rozmiary podzadań otrzymywanych w wyniku\\
+            \texttt{partition()} i iteracyjnie przechodzić do mniejszego, a
+            większe zapamiętywać na stosie. Gwarantuje to wielkość stosu
+            $O(\log_2 n)$.
+        \item Można w ogóle pozbyć się stosu, organizując go wewnętrznie w
+            sortowanej tablicy. Zmniejsza się w ten sposób złożoność pamięciową
+            do $O(1)$, ale zwiększa się współczynnik proporcjonalności
+            złożoności czasowej.
+    \end{itemize}
+
+\end{document}

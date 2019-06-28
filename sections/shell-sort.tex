@@ -1,0 +1,51 @@
+\documentclass[advanced-sorts.tex]{subfiles}
+
+\begin{document}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void shellSort(int[] arr, int n) {
+        int h = 1; //przyrost
+
+        while (h <= n / 3) {
+            h = h * 3 + 1;
+        }
+
+        while (h > 0) { //zmniejszamy h, aż do momentu h == 1
+            for (int k = h; k < n; k++) {
+                int tmp = arr[k];
+                int j = k;
+
+                while (j >= h && arr[j - h] >= tmp) {
+                    arr[j] = arr[j - h];
+                    j -= h;
+                }
+
+                arr[j] = tmp;
+            }
+
+            h = (h - 1) / 3;
+        }
+    }
+    \end{minted}
+    % \pagebreak
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$O(n (\log_2 n)^2)$
+        \item \textbf{Pamięciowa:} ~~$\Theta(1)$
+    \end{itemize}
+
+    \textbf{OPIS METODY}
+    \begin{itemize}
+        \item W tej metodzie stosuje się wielokrotnie sortowanie przez
+            wstawianie dla elementów odległych od siebie nazywaną
+            \textit{przyrostem}, który maleje od pewnej wartości by w końcu
+            przyjąć wartość \texttt{1}.
+    \end{itemize}
+
+\end{document}

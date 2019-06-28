@@ -1,0 +1,241 @@
+\documentclass[algorytmy.tex]{subfiles}
+
+\begin{document}
+
+% \subsection{Definicja}
+\subsection{Najkrótsze ścieżki przy ustalonym źródle}
+    \textbf{OGÓLNA METODA ROZWIĄZYWANIA}
+    \begin{itemize}
+        \item \texttt{D[v]} - wyliczone dotychczas najlepsze oszacowanie od góry
+            dla \texttt{d(s, v)}, początkowo równe $+\infty$.
+        \item \texttt{P[v]} - poprzednik wierzchołka \texttt{v}, początkowo
+            równy \texttt{null}.
+
+        \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Init() {
+        for each v in V {
+            D[v] = Integer.MAX_VALUE; //+infinity
+            P[v] = null;
+        }
+    }
+        \end{minted}
+
+    \item dla wszystkich krawędzi, w odpowiedniej kolejności wykonaj odpowiednią
+        liczbę razy procedurę relaksacji:
+
+        \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Relax(Vertex u, v) {
+        if (D[v] > D[u] + w[u, v]) {
+            D[v] = D[u] + w[u, v]; //poprawiono oszacowanie
+            P[v] = u; //nowy poprzednik na ścieżce
+        }
+    }
+    \end{minted}
+    \end{itemize}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item Inicjalizacja: $\Theta(n)$
+        \item \texttt{Relax}: $\Theta(1)$
+    \end{itemize}
+
+    \pagebreak
+
+    \subsubsection{Algorytm Bellman-Ford (B-F)}
+
+    \textbf{OPIS METODY}
+    \begin{itemize}
+        \item Ponieważ nie ma cykli ujemnych, powtarzanie jakiegokolwiek cyklu
+            na ścieżce jej nie skraca, zatem najkrótsze ścieżki są elementarne
+            i mają nie więcej niż $n-1$ krawędzi.
+        \item Zatem jeśli pierwszy raz wykonamy procedurę \texttt{Relax} dla
+            wszystkich krawędzi, to otrzymamy najkrótsze odległości po ścieżkach
+            1 - krawędziowych. Powtórzywszy to, otrzymamy najkrótsze odległości po
+            ścieżkach 2 - krawędziowych, itd.
+    \end{itemize}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item $\Theta(n \cdot m )$ - gdy graf reprezentowany przez listę
+            sąsiedztwa
+        \item $\Theta(n^3)$ - gdy graf reprezentowany przez macierz sąsiedztwa
+            \textit{(szukając krawędzi z wierzchołka trzeba przeglądać cały
+            wiersz tablicy)}.
+    \end{itemize}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    BellmanFord(Graph G = (V, E)) {
+        Init();
+        D[s] = 0;
+        for (i = 1; i < n; i++)
+            for each (u, v) in E
+                Relax(u, v);
+    }
+    \end{minted}
+
+    \textbf{SPRAWDZENIE CZY GRAF ZAWIERA UJEMNE CYKLE}
+    \begin{itemize}
+        \item Zauważmy, że jeśli ma taki cykl, to po zakończeniu B-F, jeszcze
+            jedna iteracja pętli \texttt{for each} będzie ‘poprawiać’
+            oszacowanie \texttt{D[v]} dla pewnego wierzchołka \texttt{v}.
+            Nie powiększa to złożoności algorytmu.
+    \end{itemize}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    boolean Test() {
+        for each (u, v) in E
+            if (D[v] > D[u] + w[u, v])
+                return false; // graf zawiera ujemny cykl
+        return true; // graf OK
+    }
+    \end{minted}
+
+    \pagebreak
+
+    \subsubsection{Algorytm Dijkstra (DIJ 1959)}
+
+    \textbf{OPIS METODY}
+    \begin{itemize}
+        \item Zakładamy, że wagi krawędzi są \textbf{nieujemne}.
+    \end{itemize}
+    \begin{enumerate}
+        \item W zbiorze \textit{(kolejce)} \texttt{Q} przechowuj wierzchołki
+            \texttt{v}, dla których \texttt{D[v]} być może nie ma ostatecznej
+            wartości, początkowo \texttt{Q = V} i ustaw \texttt{D[s] = 0}.
+        \item W kolejnych krokach:
+            \begin{enumerate}
+                \item Znajduj $u \in Q$ taki, że \texttt{D[u]} jest
+                    \textbf{najmniejsze}.
+
+                \item Usuń \texttt{u} z \texttt{Q} i popraw pozostałym $v \in Q$
+                    ich \texttt{D[v]} względem \texttt{u}.
+            \end{enumerate}
+    \end{enumerate}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Dijkstra(G = (V, E)) {
+        Init();
+        D[s] = 0;
+        Q = V; //kolejka wierzchołków
+
+        while (Q != empty) {
+            u = DelMin(Q);
+            for each v in L[u] // lista następników u
+                Relax(u, v);
+        }
+    }
+    \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ:}
+    \begin{enumerate}
+        \item \texttt{Q} \textbf{jest zwykłą listą:} $\Theta(n^2)$
+            \begin{itemize}
+                \item wyszukanie i usunięcie minimum: $\Theta(n)$
+                \item przeglądnięcie listy następników i wykonanie
+                      \texttt{Relax}: $\Theta(n)$
+                \item oba powyższe - wykonywane w pętli zwenętrznej $n$ razy
+            \end{itemize}
+
+        \item \texttt{Q} \textbf{jest min-kopcem, a graf jest
+            reprezentowany przez listy sąsiedztwa:} $\Theta(m \log n)$
+            \begin{itemize}
+                \item $n$ razy \texttt{DelMin()}: $\Theta(n \log n)$
+                \item $m$ raz \texttt{Relax()}: $\Theta(m \log n)$
+                      \textit{(każda krawędz raz, koszt przesiewania log n)}
+            \end{itemize}
+    \end{enumerate}
+
+\pagebreak
+
+\subsection{Najkrótsze ścieżki między wszystkimi wierzchołkami}
+    \subsubsection{Algorytm Floyda}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Floyd(G = (V, E)) { //O(n^3)
+        // inicjalizacja: ścieżki 1-krawędziowe
+        for (i = 1; i <= n; i++)
+            for (j = 1; j <= n; j++)
+                D[i, j] = w[i, j];
+
+        for (k = 1; k <= n; k++)
+            for (i = 1; i <= n; i++)
+                for (j = 1; j <= n; j++) {
+                    t = D[i, k] + D[k, j];
+                    if (t < D[i, j]) {
+                        D[i, j] = t;
+                        P[i, j] = k;
+                    }
+                }
+    }
+    \end{minted}
+
+    % \textbf{ZŁOŻONOŚĆ:} $\Theta(n^3)$
+
+\subsection{Przechodnie domknięcie grafu}
+    \subsubsection{Algorytm Warshalla}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               fontsize=\footnotesize,
+               framesep=2mm]{java}
+    Warshall(G = (V, E)) {
+        // inicjalizacja
+        for (i = 1; i <= n; i++)
+            for (j = 1; j <= n; j++)
+                if ((i, j) in E)
+                    D[i, j] = 1;
+                else
+                    D[i, j] = 0;
+
+        for (k = 1; k <= n; k++)
+            for (i = 1; i <= n; i++)
+                for (j = 1; j <= n; j++)
+                    if (D[i, j] == 0)
+                        D[i, j] = D[i, k] && D[k, j];
+    }
+    \end{minted}
+
+% \subsection{Problemy grafowe NP-zupełne}
+%     \subsubsection{Problem komiwojażera}
+%     \subsubsection{Kolorowanie grafów}
+
+\end{document}

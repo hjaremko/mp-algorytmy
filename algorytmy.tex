@@ -1,0 +1,103 @@
+% !TEX options=--shell-escape
+\documentclass[a5paper, 4pt]{article}
+% \usepackage{lmodern}
+\usepackage[MeX]{polski}
+\usepackage{geometry}
+\usepackage{fontspec}
+\usepackage{fontawesome}
+\usepackage{color}
+\usepackage{adjustbox}
+\usepackage{minted,xcolor}
+\usemintedstyle{trac}
+% \definecolor{bg}{HTML}{282828} % from https://github.com/kevinsawicki/monokai
+% \setminted{bgcolor=bg}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+
+\usepackage{subfiles}
+
+\setmainfont{Lato Light}
+\setmainfont[Color=primary, Path = fonts/lato/,
+BoldItalicFont=Lato-RegIta,BoldFont=Lato-Reg,ItalicFont=Lato-LigIta]{Lato-Lig}
+\setmonofont[Scale=MatchLowercase]{Fira Code}
+
+\newgeometry{tmargin=2cm, bmargin=2cm, lmargin=1.5cm, rmargin=1.5cm}
+\setlength{\parindent}{0cm}
+
+% \linespread{0.9}
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+
+\title{
+\vskip 2cm
+  Metody Programowania}
+  % \large Algorytmy}
+\author{Hubert Jaremko}
+% \date{2018/2019}
+\date{\today}
+\frenchspacing
+
+\begin{document}
+    \maketitle
+    \pagebreak
+    \tableofcontents
+    \pagebreak
+
+    \section{Sortowania proste}
+    \subfile{sections/simple-sorts.tex}
+
+    \section{Sortowania zaawansowane}
+    \subfile{sections/advanced-sorts.tex}
+
+    \section{Wyszukiwania}
+    \subfile{sections/search-algorithms.tex}
+
+    \section{Selekcja}
+    \subfile{sections/selection.tex}
+
+    \pagebreak
+
+    \section{Liczba inwersji}
+    \subfile{sections/inversions.tex}
+
+    \section{Algorytm Kadane}
+    \subfile{sections/kadane.tex}
+
+    \section{Problem plecakowy}
+    \subfile{sections/knapsack.tex}
+
+    \section{Wieże Hanoi}
+    \subfile{sections/hanoi.tex}
+
+    \section{Eliminacja rekurencji}
+    \subfile{sections/recursion.tex}
+
+    % \section{Tablice}
+    \subfile{sections/array.tex}
+
+    \section{Listy}
+    \subfile{sections/list.tex}
+
+    \section{Stosy}
+    \subfile{sections/stack.tex}
+
+    \section{Kolejki}
+    \subfile{sections/queue.tex}
+
+    \section{Drzewa}
+    \subfile{sections/tree.tex}
+
+    \section{Kopce}
+    \subfile{sections/heap.tex}
+
+    \section{Grafy}
+    \subfile{sections/graph.tex}
+
+    \section{Grafy ważone}
+    \subfile{sections/weighted-graph.tex}
+
+    \newpage
+    ~
+\end{document}

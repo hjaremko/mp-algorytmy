@@ -1,0 +1,51 @@
+\documentclass[simple-sorts.tex]{subfiles}
+
+\begin{document}
+
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void selectionSort(int[] arr) {
+        for (int k = 0; k < arr.length - 1; k++) {
+            int min = k;
+
+            for (int j = k + 1; j < arr.length; j++) {
+                if (arr[j] < arr[min]) {
+                    min = j;
+                }
+            }
+
+            swap(k, min);
+        }
+    }
+    \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$\Theta(n^2)$
+        \item \textbf{Średnia:} ~~$\Theta(n^2)$ (ok. $\frac{n^2}{2}$
+            porównań)
+    \end{itemize}
+
+    \textbf{ZALETY}
+    \begin{itemize}
+        \item Wykonuje tylko $n-1$ przestawień - zalecana w przypadku niedługich
+            tablic z długimi rekordami.
+    \end{itemize}
+
+    \textbf{WADY}
+    \begin{itemize}
+        \item \textbf{Niestablilny.}
+    \end{itemize}
+
+    \textbf{MOŻLIWE USPRAWNIENIA}
+    \begin{itemize}
+        \item Kosztem zwiększenia współczynnika proporcjonalności złożoności,
+            można ten algorytm uczynić stabilnym (zamiast zamiany przesunąć
+            element na odpowiednie miejsce).
+    \end{itemize}
+
+\end{document}

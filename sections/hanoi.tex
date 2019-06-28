@@ -1,0 +1,43 @@
+\documentclass[../algorytmy.tex]{subfiles}
+
+\begin{document}
+
+    \textbf{OPIS METODY}\\
+
+    Niech na wieży źródłowej - \texttt{A} znajduje się $n$ krążków, chcemy
+    przenieść wszystkie krążki z wieży \texttt{A} na wieżę docelową -
+    \texttt{B}, przy czym dostępna jest wieża pomocnicza \texttt{C}.
+
+    \begin{enumerate}
+        \item Przenieś poddrzewo składające się z $n-1$ krążków z wieży
+            \texttt{A} na wieżę \texttt{C}.
+        \item Przenieś ostatni (największy krążek) z \texttt{A} na wieżę
+            docelową \texttt{B}.
+        \item Przenieś poddrzewo z wieży \texttt{C} na \texttt{B}.
+    \end{enumerate}
+
+    \textbf{PSEUDOKOD}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               framesep=2mm]{java}
+    void Towers(n, A, B, C) {
+        if (n == 0)
+            return;
+
+        Towers(n - 1, A, C, B);
+        A -> B;
+        Towers(n - 1, C, B, A);
+    }
+    \end{minted}
+
+    \textbf{ZŁOŻONOŚĆ}
+    \begin{itemize}
+        \item \textbf{Pesymistyczna:} ~~$\Theta(2^n)$
+    \end{itemize}
+
+    % \pagebreak
+
+\end{document}

@@ -1,0 +1,90 @@
+\documentclass[algorytmy.tex]{subfiles}
+
+\begin{document}
+    \subsection{Prosta przy użyciu listy wiązanej dwustronnej}
+    \subsubsection{Wstawianie}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    void enqueue(T x) {
+        Node newNode = new Node(x);
+        rear.next = newNode;
+        rear = newNode;
+    }
+   \end{minted}
+
+    \subsubsection{Usuwanie}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    T dequeue() {
+        T tmp = front.next.info;
+        front = front.next;
+
+        return tmp;
+    }
+   \end{minted}
+
+    \subsection{Priorytetowa przy użyciu uporządkowanej listy wiązanej}
+
+    \pagebreak
+    \subsection{Prosta przy użyciu tablicy}
+    \begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               gobble=2,
+               frame=lines,
+               % fontsize=\footnotesize,
+               framesep=2mm]{java}
+    class Queue {
+        int maxSize;
+        long[] elem;
+        int front = 0;
+        int rear = 0;
+
+        private int addOne(int i) {
+            return (i + 1) % maxSize;
+        }
+
+
+        void enqueue(long x) {
+            if (isFull())
+                error("Queue is full");
+            else {
+                elem[rear] = x;
+                rear = addOne(rear);
+            }
+        }
+
+        long dequeue() {
+            if (isEmpty()) {
+                error("Queue is empty");
+                return -1;
+            }
+            else {
+                long tmp = elem[front];
+                front = addOne(front);
+                return tmp;
+            }
+        }
+
+        boolean isFull() {
+            return (addOne(rear) == front);
+        }
+    }
+   \end{minted}
+
+    % \subsection{Priorytetowa przy użyciu tablicy}
+    % \subsection{Dwustronna przy użyciu tablicy}
+
+\pagebreak
+
+\end{document}
