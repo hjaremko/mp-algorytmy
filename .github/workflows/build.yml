@@ -19,6 +19,7 @@ jobs:
         run: sudo apt-get install texlive-extra-utils
       - name: Create main booklet
         run: |
+          cd src
           pdfbook --short-edge algorytmy.pdf
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
